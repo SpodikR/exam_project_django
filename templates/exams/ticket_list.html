@@ -1,0 +1,21 @@
+<!-- templates/exams/ticket_list.html -->
+{% extends "base.html" %}
+
+{% block title %}Білети з предмету: {{ subject.name }}{% endblock %}
+
+{% block content %}
+    <a href="{% url 'subject_list' %}" class="back-link">← До списку предметів</a>
+    <h2>Білети з предмету: {{ subject.name }}</h2>
+    {% if tickets %}
+        <ul>
+            {% for ticket in tickets %}
+                <li>
+                    <a href="{% url 'ticket_detail' ticket.id %}">Білет {{ ticket.number }}</a>
+                    <span>(кількість питань: {{ ticket.questions.count }})</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Для цього предмету ще не додано білетів. Додайте їх через <a href="/admin/">адмін-панель</a>.</p>
+    {% endif %}
+{% endblock %}

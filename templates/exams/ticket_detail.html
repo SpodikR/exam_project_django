@@ -1,0 +1,25 @@
+<!-- templates/exams/ticket_detail.html -->
+{% extends "base.html" %}
+
+{% block title %}Білет {{ ticket.number }} - {{ ticket.subject.name }}{% endblock %}
+
+{% block content %}
+    <a href="{% url 'ticket_list' ticket.subject.id %}" class="back-link">← До списку білетів "{{ticket.subject.name}}"</a>
+    <h2>{{ ticket.subject.name }} - Білет {{ ticket.number }}</h2>
+    {% if ticket.questions.all %}
+        {% for question in ticket.questions.all %}
+            <div class="question-block">
+                <h3>Питання:</h3>
+                <p class="question-text">{{ question.question_text|linebreaksbr }}</p>
+                <button class="toggle-answer-btn" data-question-id="{{ question.id }}">Показати відповідь</button>
+                <div id="answer-{{ question.id }}" class="answer-text" style="display:none;">
+                    <h4>Відповідь:</h4>
+                    <p>{{ question.answer_text|linebreaksbr }}</p>
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>До цього білету ще не додано питань. Додайте їх через <a href="/admin/">адмін-панель</a>.</p>
+    {% endif %}
+{% endblock %}

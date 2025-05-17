@@ -1,0 +1,20 @@
+<!-- templates/exams/subject_list.html -->
+{% extends "base.html" %}
+
+{% block title %}Список Предметів - Мої Білети{% endblock %}
+
+{% block content %}
+    <h2>Обери предмет:</h2>
+    {% if subjects %}
+        <ul>
+            {% for subject in subjects %}
+                <li>
+                    <a href="{% url 'ticket_list' subject.id %}">{{ subject.name }}</a>
+                    <span>(кількість білетів: {{ subject.tickets.count }})</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Предметів ще не додано. Додайте їх через <a href="/admin/">адмін-панель</a>.</p>
+    {% endif %}
+{% endblock %}
