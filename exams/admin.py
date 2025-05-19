@@ -7,11 +7,17 @@ class SubjectAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
 
+class QuestionInline(admin.TabularInline): # або admin.StackedInline
+    model = Question
+    extra = 1 # Кількість порожніх форм для додавання питань
+    fields = ('question_text', 'answer_text') # Які поля показувати
+   
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
     list_display = ('number', 'subject')
     list_filter = ('subject',) # Фільтр по предмету
     search_fields = ('number', 'subject__name')
+    inlines = [QuestionInline] # <--- Додаємо інлайни сюди
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
@@ -26,7 +32,7 @@ class QuestionAdmin(admin.ModelAdmin):
     def short_answer_text(self, obj):
         return obj.answer_text[:70] + "..." if len(obj.answer_text) > 70 else obj.answer_text
     short_answer_text.short_description = "Відповідь (коротко)"
-
+ 
 # Або простіше, якщо не потрібні кастомні налаштування:
 # admin.site.register(Subject)
 # admin.site.register(Ticket)

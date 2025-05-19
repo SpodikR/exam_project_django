@@ -27,6 +27,13 @@ class Question(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name="questions", verbose_name="Білет")
     question_text = models.TextField(verbose_name="Текст питання")
     answer_text = models.TextField(verbose_name="Текст відповіді")
+    # Нове поле для зображення
+    answer_image = models.ImageField(
+        upload_to='answer_images/',  # Тека, куди будуть завантажуватися зображення
+        null=True,                   # Дозволяє полю бути порожнім (не для всіх відповідей може бути картинка)
+        blank=True,                  # Дозволяє полю бути порожнім в формах адмінки
+        verbose_name="Зображення до відповіді"
+    )
 
     def __str__(self):
         return f"Питання до {self.ticket} (перші 30 символів: {self.question_text[:30]}...)"

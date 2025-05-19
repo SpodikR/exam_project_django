@@ -1,0 +1,42 @@
+<!-- templates/exams/ticket_detail.html -->
+{% extends "base.html" %}
+{% load static %} <!-- Переконайся, що static завантажено, якщо ти використовуєш Bootstrap з локальних файлів -->
+
+{% block title %}Білет {{ ticket.number }} - {{ ticket.subject.name }}{% endblock %}
+
+{% block content %}
+    <a href="{% url 'ticket_list' ticket.subject.id %}" class="btn btn-outline-secondary mb-3">← До списку білетів "{{ticket.subject.name}}"</a>
+    <h2 class="mb-4">{{ ticket.subject.name }} - <span class="text-success">Білет {{ ticket.number }}</span></h2>
+    
+    {% if ticket.questions.all %}
+        {% for question in ticket.questions.all %}
+            <div class="card mb-3">
+                <div class="card-header">
+                    <strong>Питання:</strong>
+                </div>
+                <div class="card-body">
+                    <p class="card-text question-text">{{ question.question_text|linebreaksbr }}</p>
+                    <button class="btn btn-primary toggle-answer-btn" data-bs-toggle="collapse" data-bs-target="#answer-{{ question.id }}" aria-expanded="false" aria-controls="answer-{{ question.id }}">
+                        Показати відповідь
+                    </button>
+                    <div class="collapse mt-2" id="answer-{{ question.id }}">
+                        <div class="card card-body answer-text bg-light">
+                            <h5>Відповідь:</h5>
+                            <p>{{ question.answer_text|linebreaksbr }}</p>
+                            {% if question.answer_image %}  {# Перевіряємо, чи є зображення #}
+                                <div class="mt-2">
+                                    <img src="{{ question.answer_image.url }}" alt="Зображення до відповіді: {{ question.question_text|truncatewords:5 }}" class="img-fluid rounded">
+                                    {# img-fluid робить зображення адаптивним, rounded - трохи заокруглює кути #}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            До цього білету ще не додано питань. Додайте їх через <a href="/admin/" class="alert-link">адмін-панель</a>.
+        </div>
+    {% endif %}
+{% endblock %}

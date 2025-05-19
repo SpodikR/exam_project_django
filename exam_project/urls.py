@@ -1,22 +1,16 @@
-"""
-URL configuration for exam_project project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
+# exam_project/urls.py
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include # Додай include
+from django.conf import settings # Імпортуємо settings
+from django.conf.urls.static import static # Імпортуємо static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('exams.urls')), # <--- ДОДАЙ ЦЕЙ РЯДОК. Всі запити на головну сторінку підуть в exams.urls
 ]
+
+# Додаємо це тільки якщо DEBUG=True (тобто під час розробки)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Також можна додати для статичних файлів, якщо ти не використовуєш collectstatic під час розробки
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
